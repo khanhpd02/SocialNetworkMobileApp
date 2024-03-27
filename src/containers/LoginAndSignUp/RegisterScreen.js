@@ -10,29 +10,38 @@ import BackButton from '../../components/LoginAndSignUp/BackButton'
 import { theme } from '../../theme/LoginAndSignUp/theme'
 import { emailValidator } from '../../utils/helpers/emailValidator'
 import { passwordValidator } from '../../utils/helpers/passwordValidator'
-import { nameValidator } from '../../utils/helpers/nameValidator'
 
 export default function RegisterScreen({ navigation }) {
-  const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
 
-  const onSignUpPressed = () => {
-    const nameError = nameValidator(name.value)
+  const onSignUpPressed = async () => {
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError || nameError) {
-      setName({ ...name, error: nameError })
+    if (emailError || passwordError) {
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
+    const response = await fetch('https://socialnetwork.somee.com/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+      }),
     })
+  
+    if (response.ok) {
+      navigation.navigate('VertifyPinScreen', { email: email })
+    } else {
+      const error = await response.text()
+      console.error('Registration failed:', error)
+    }
   }
-
+  
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />

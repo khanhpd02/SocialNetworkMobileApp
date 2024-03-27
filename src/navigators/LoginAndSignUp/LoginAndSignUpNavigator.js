@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { StartScreen, LoginScreen, RegisterScreen, ResetPasswordScreen, Dashboard } from '../../containers/LoginAndSignUp'
+import { StartScreen, LoginScreen, RegisterScreen, ResetPasswordScreen, Dashboard,VertifyPinScreen } from '../../containers/LoginAndSignUp'
 
 const Stack = createStackNavigator()
 
@@ -13,6 +13,7 @@ export default function AppNavigator() {
       }}
     >
       <Stack.Screen name="StartScreen" component={StartScreen} />
+      <Stack.Screen name="VertifyPinScreen" component={VertifyPinScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
       <Stack.Screen name="Dashboard" component={Dashboard} />

@@ -1,70 +1,72 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Text } from 'react-native-paper'
-import Background from '../../components/LoginAndSignUp/Background'
-import Logo from '../../components/LoginAndSignUp/Logo'
-import Header from '../../components/LoginAndSignUp/Header'
-import Button from '../../components/LoginAndSignUp/Button'
-import TextInput from '../../components/LoginAndSignUp/TextInput'
-import BackButton from '../../components/LoginAndSignUp/BackButton'
-import { theme } from '../../theme/LoginAndSignUp/theme'
-import { emailValidator } from '../../utils/helpers/emailValidator'
-import { passwordValidator } from '../../utils/helpers/passwordValidator'
-import { nameValidator } from '../../utils/helpers/nameValidator'
+import React, { useState, useRef } from 'react';
+import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import { Text } from 'react-native-paper';
+import Background from '../../components/LoginAndSignUp/Background';
+import Logo from '../../components/LoginAndSignUp/Logo';
+import Header from '../../components/LoginAndSignUp/Header';
+import Button from '../../components/LoginAndSignUp/Button';
+import BackButton from '../../components/LoginAndSignUp/BackButton';
+import { theme } from '../../theme/LoginAndSignUp/theme';
 
-export default function RegisterScreen({ navigation }) {
-  const [name, setName] = useState({ value: '', error: '' })
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+export default function VertifyPinScreen({ navigation }) {
+  const route = useRoute();
+  const email = route.params.email;
+  const [pin, setPin] = useState(Array(6).fill(''));
+  const pinInputRefs = Array(6).fill().map(() => useRef(null));
 
-  const onSignUpPressed = () => {
-    const nameError = nameValidator(name.value)
-    const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError || nameError) {
-      setName({ ...name, error: nameError })
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
-      return
+  const onPinInputChange = (index, value) => {
+    const newPin = [...pin];
+    newPin[index] = value;
+    setPin(newPin);
+    if (value && index < pinInputRefs.length - 1) {
+      pinInputRefs[index + 1].current.focus();
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
-    })
-  }
+  };
 
+  const onVerifyPressed = () => {
+    const body = {
+      email: email.value,
+      pin: pin.join('')
+    };
+    console.log(body)
+    fetch('https://socialnetwork.somee.com/api/auth/VerifyPin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Verification successful');
+        } else {
+          console.log('Verification failed');
+        }
+      })
+      .catch(error => {
+        console.error('Error calling VerifyPin API:', error);
+      });
+  };
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header>Create Account</Header>
-      <TextInput
-        label="Email"
-        returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-      />
-      <TextInput
-        label="Password"
-        returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: '' })}
-        error={!!password.error}
-        errorText={password.error}
-        secureTextEntry
-      />
-      <Button
-        mode="contained"
-        onPress={onSignUpPressed}
-        style={{ marginTop: 24 }}
-      >
-        Sign Up
+      <Header>Pin Code</Header>
+      <View style={styles.pinContainer}>
+        {pin.map((_, i) => (
+          <TextInput
+            key={i}
+            style={styles.pinInput}
+            keyboardType="numeric"
+            maxLength={1}
+            onChangeText={value => onPinInputChange(i, value)}
+            ref={pinInputRefs[i]}
+          />
+        ))}
+      </View>
+      <Button mode="contained" onPress={onVerifyPressed} style={{ marginTop: 24 }}>
+        Verify
       </Button>
       <View style={styles.row}>
         <Text>Already have an account? </Text>
@@ -73,7 +75,7 @@ export default function RegisterScreen({ navigation }) {
         </TouchableOpacity>
       </View>
     </Background>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -85,4 +87,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
-})
+  pinContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '60%',
+    alignSelf: 'center',
+    marginBottom: 24,
+  },
+  pinInput: {
+    width: '15%',
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.primary,
+    textAlign: 'center',
+    fontSize: 24,
+  },
+});
