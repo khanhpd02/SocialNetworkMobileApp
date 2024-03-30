@@ -3,20 +3,29 @@ import {Button, Image, StyleSheet, View} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import {AxiosContext} from '../context/AxiosContext';
 import Spinner from './Spinner';
+import {
 
-const Dashboard = () => {
+  tokenState,
+} from "../recoil/initState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { api, setAuthToken } from '../utils/helpers/setAuthToken';
+const Dashboard = ({ navigation }) => {
   const axiosContext = useContext(AxiosContext);
   const authContext = useContext(AuthContext);
   const [image, setImage] = useState(null);
   const [status, setStatus] = useState('idle');
+  const [to, setToken] = useRecoilState(tokenState);
 
   const loadImage = async () => {
+    setAuthToken(to)
     setStatus('loading');
     try {
-      const response = await axiosContext.authAxios.get('/cat');
+      const response = await api.get('https://www.socialnetwork.somee.com/api/post');
+      console.log(response)
       setImage(response.data);
       setStatus('success');
     } catch (error) {
+      console.log(error)
       setStatus('error');
     }
   };
@@ -27,16 +36,11 @@ const Dashboard = () => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={{uri: image}}
-        width={300}
-        height={500}
-        style={styles.image}
-      />
+     
 
       <View style={styles.buttonGroup}>
         <Button title="Get Image" onPress={loadImage} />
-        <Button title="Logout" onPress={() => authContext.logout()} />
+        <Button title="Logout"  onPress={() => navigation.navigate('Dashboard1')} />
       </View>
     </View>
   );

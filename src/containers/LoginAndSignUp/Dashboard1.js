@@ -4,8 +4,12 @@ import Logo from '../../components/LoginAndSignUp/Logo'
 import Header from '../../components/LoginAndSignUp/Header'
 import Paragraph from '../../components/LoginAndSignUp/Paragraph'
 import Button from '../../components/LoginAndSignUp/Button'
-
-export default function Dashboard({ navigation }) {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+export default function Dashboard1({ navigation }) {
+  const Logout = () => {
+    AsyncStorage.removeItem('token')
+    navigation.navigate('Login')
+  }
   return (
     <Background>
       <Logo />
@@ -16,11 +20,7 @@ export default function Dashboard({ navigation }) {
       </Paragraph>
       <Button
         mode="outlined"
-        onPress={() =>
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'StartScreen' }],
-          })
+        onPress={Logout
         }
       >
         Logout

@@ -1,15 +1,15 @@
 import React, {createContext, useState} from 'react';
 import * as Keychain from 'react-native-keychain';
 const AuthContext = createContext(null);
-const {Provider} = AuthContext;
+// const {Provider} = AuthContext;
 
 const AuthProvider = ({children}) => {
   const [authState, setAuthState] = useState({
-    accessToken: null,
+    accessToken: "s",
     refreshToken: null,
     authenticated: null,
   });
-
+  console.log(authState)
   const logout = async () => {
     await Keychain.resetGenericPassword();
     setAuthState({
@@ -24,7 +24,7 @@ const AuthProvider = ({children}) => {
   };
 
   return (
-    <Provider
+    <AuthContext.Provider
       value={{
         authState,
         getAccessToken,
@@ -32,7 +32,7 @@ const AuthProvider = ({children}) => {
         logout,
       }}>
       {children}
-    </Provider>
+    </AuthContext.Provider>
   );
 };
 
