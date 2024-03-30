@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+
 import { Text } from 'react-native-paper'
 import Background from '../../components/LoginAndSignUp/Background'
 import Logo from '../../components/LoginAndSignUp/Logo'
@@ -10,28 +9,58 @@ import BackButton from '../../components/LoginAndSignUp/BackButton'
 import { theme } from '../../theme/LoginAndSignUp/theme'
 import { emailValidator } from '../../utils/helpers/emailValidator'
 import { passwordValidator } from '../../utils/helpers/passwordValidator'
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  TouchableOpacity
+} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {AuthContext} from '../../context/AuthContext';
+import * as Keychain from 'react-native-keychain';
+import {AxiosContext} from '../../context/AxiosContext';
+import axios from 'axios'
+  const Login = () => {
+  const [email, setEmail] = useState('');
+  
+  const [password, setPassword] = useState('');
+  const authContext = useContext(AuthContext);
 
-export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const publicAxios = axios.create({
+    baseURL: 'https://www.socialnetwork.somee.com/api',
+  });
+  const onLogin = async () => {
+    console.log(email,password)
+    try {
+      const response = await publicAxios.post('/auth/login', {
+        email,
+        password,
+      });
+      console.log(response)
+      const {accessToken, refreshToken} = response.data;
+      authContext.setAuthState({
+        accessToken,
+        refreshToken,
+        authenticated: true,
+      });
 
-  const onLoginPressed = () => {
-    const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
-      return
+      await Keychain.setGenericPassword(
+        'token',
+        JSON.stringify({
+          accessToken,
+          refreshToken,
+        }),
+      );
+    } catch (error) {
+      Alert.alert('Login Failed', error.response.data.message);
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'EditInforScreen' }],
-    })
-  }
+  };
+
 
   return (
     <Background>
-      <BackButton goBack={navigation.goBack} />
+      <BackButton  />
       <Logo />
       <Header>Welcome back.</Header>
       <TextInput
@@ -57,17 +86,17 @@ export default function LoginScreen({ navigation }) {
       />
       <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPasswordScreen')}
+         
         >
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
-      <Button mode="contained" onPress={onLoginPressed}>
+      <Button mode="contained" onPress={() => onLogin()}>
         Login
       </Button>
       <View style={styles.row}>
         <Text>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
+        <TouchableOpacity >
           <Text style={styles.link}>Sign up</Text>
         </TouchableOpacity>
       </View>
@@ -94,3 +123,4 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
   },
 })
+export default Login;  
