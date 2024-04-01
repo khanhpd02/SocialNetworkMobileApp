@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { imagesDataURL } from "../../constants/data";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 
-const EditInforScreen = ({ navigation }) => {
+const EditProfile = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(imagesDataURL[0]);
   const [name, setName] = useState("Melissa Peters");
   const [email, setEmail] = useState("metperters@gmail.com");
@@ -142,7 +142,7 @@ const EditInforScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <Text style={{ ...FONTS.h3 }} >Edit Profile</Text>
+        <Text style={{ ...FONTS.h3 }}>Edit Profile</Text>
       </View>
 
       <ScrollView>
@@ -341,4 +341,4 @@ const EditInforScreen = ({ navigation }) => {
   );
 };
 
-export default EditInforScreen;
+export default EditProfile;

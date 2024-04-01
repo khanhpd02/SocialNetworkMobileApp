@@ -47,13 +47,29 @@ import { RecoilRoot } from "recoil";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import CreatePostforScreen from './src/containers/CreatePost/CreatePost';
+import RegisterScreen from './src/containers/LoginAndSignUp/RegisterScreen';
+import BottomTabNav from './src/containers/Test/BottomTabNav';
+import VertifyPinScreen from "./src/containers/LoginAndSignUp/VertifyPinScreen"
+import { Profile } from './src/containers/Test';
 const Stack = createStackNavigator();
 export default  App = () => {
   return (
     <RecoilRoot>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Login" component={Login}  options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }}/>
+        <Stack.Screen name="BottomTabNavigation" component={BottomTabNav}  options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }}/>
+
         <Stack.Screen name="Dashboard" component={Dashboard} 
          options={{
           // Ẩn nút back và tiêu đề
@@ -74,7 +90,49 @@ export default  App = () => {
           headerTitle: null,
           headerShown: false,
         }} />
+         <Stack.Screen name="Register" component={RegisterScreen}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
+         <Stack.Screen name="VertifyPinScreen" component={VertifyPinScreen}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
+         <Stack.Screen name="Profile" component={Profile}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
       </Stack.Navigator>
+      {/* <Stack.Navigator initialRouteName="BottomTabNavigation">
+      
+        
+        <Stack.Screen name="Dashboard" component={Dashboard} 
+         options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
+        <Stack.Screen name="Dashboard1" component={Dashboard1} />
+        <Stack.Screen name="EditProfile" component={EditInforScreen}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
+        <Stack.Screen name="CreatePost" component={CreatePostforScreen}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
+      </Stack.Navigator> */}
     </NavigationContainer>
     </RecoilRoot>
   );

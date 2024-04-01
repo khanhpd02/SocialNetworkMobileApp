@@ -44,6 +44,9 @@ import axios from 'axios'
       if (token !== null) {
        
         setToken3(token)
+        if(token3 !== "") {
+          navigation.navigate('BottomTabNavigation')
+        }
       } else {
         setToken3("")
       }
@@ -51,10 +54,9 @@ import axios from 'axios'
     .catch(error => {
       console.log('Error retrieving token:', error);
     });
-    console.log (token3)
-    if(token3 !== "") {
-      navigation.navigate('Dashboard')
-    }
+    console.log ("toek la",typeof token3, token3)
+    
+    
     
   })
   const handleLogin = () => {
@@ -91,7 +93,7 @@ import axios from 'axios'
           // console.log(to)
      
         if (data.success) {
-          navigation.navigate('Dashboard1')
+          navigation.navigate('BottomTabNavigation')
           // setLoggedIn(true); // Đăng nhập thành công
         } else {
           setError(data.message); // Xử lý lỗi đăng nhập
@@ -104,32 +106,7 @@ import axios from 'axios'
       });
   };
 
-  const onLogin = async () => {
-    console.log(email,password)
-    try {
-      const response = await publicAxios.post('https://www.socialnetwork.somee.com/api/auth/login', {
-        email,
-        password,
-      });
-      console.log(response)
-      const {accessToken, refreshToken} = response.data;
-      authContext.setAuthState({
-        accessToken,
-        refreshToken,
-        authenticated: true,
-      });
 
-      await Keychain.setGenericPassword(
-        'token',
-        JSON.stringify({
-          accessToken,
-          refreshToken,
-        }),
-      );
-    } catch (error) {
-      console.log( error);
-    }
-  };
 
 
   return (
@@ -183,7 +160,7 @@ import axios from 'axios'
       </Button>
       <View style={styles.row}>
         <Text>Don’t have an account? </Text>
-        <TouchableOpacity >
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
           <Text style={styles.link}>Sign up</Text>
         </TouchableOpacity>
       </View>

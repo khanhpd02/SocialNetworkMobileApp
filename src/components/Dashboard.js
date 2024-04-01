@@ -62,7 +62,9 @@ export const Dashboard = ({ navigation}) => {
         <ScrollView style={styles.feedContainer}>
         {
           data.map((item,index) => (
-            <Feed data= {item}/>
+            <View key={index}>
+              <Feed data= {item}/>
+            </View>
           ))
         }
     
