@@ -44,9 +44,7 @@ import axios from 'axios'
       if (token !== null) {
        
         setToken3(token)
-        if(token3 !== "") {
-          navigation.navigate('BottomTabNavigation')
-        }
+        
       } else {
         setToken3("")
       }
@@ -54,11 +52,12 @@ import axios from 'axios'
     .catch(error => {
       console.log('Error retrieving token:', error);
     });
-    console.log ("toek la",typeof token3, token3)
+    console.log ("Toke la",token3)
+    if(token3 !== "") {
+          navigation.navigate('BottomTabNavigation')
+        }
     
-    
-    
-  })
+  },[])
   const handleLogin = () => {
     fetch('https://www.socialnetwork.somee.com/api/auth/login', {
       method: 'POST',
@@ -77,6 +76,7 @@ import axios from 'axios'
 
         AsyncStorage.setItem('token', token)
         .then(() => {
+          
           // Sau khi đã lưu token vào AsyncStorage, bạn cần lấy lại giá trị token từ AsyncStorage
           return AsyncStorage.getItem('token');
         })
@@ -88,16 +88,23 @@ import axios from 'axios'
         .catch(error => {
           console.log(error);
         });
-        
-          // setToken(token)
+        console.log("Info: " , data.data.data.hasInfor)
+           setToken(token)
           // console.log(to)
+          if (data.data.data.hasInfor == false) {
+            console.log(123)
+            navigation.navigate('CreateInfo')
+          
+          } else {
+            navigation.navigate('BottomTabNavigation')
+          }
+          // if (data.success == 200) {
      
-        if (data.success) {
-          navigation.navigate('BottomTabNavigation')
-          // setLoggedIn(true); // Đăng nhập thành công
-        } else {
-          setError(data.message); // Xử lý lỗi đăng nhập
-        }
+          //   navigation.navigate('BottomTabNavigation')
+          //   // setLoggedIn(true); // Đăng nhập thành công
+          // } else {
+          //   navigation.navigate('BottomTabNavigation')
+          // }
       })
       .catch(error => {
         console.error('Error:', error);

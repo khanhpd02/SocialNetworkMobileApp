@@ -77,7 +77,7 @@ export default function RegisterScreen({ navigation }) {
       </Button>
       <View style={styles.row}>
         <Text>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
+        <TouchableOpacity onPress={() => navigation.replace('Login')}>
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>

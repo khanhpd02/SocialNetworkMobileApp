@@ -9,7 +9,7 @@ const Feed = ({data}) => {
   const [likeRR, setLikeRR] = useRecoilState(likeR);
   const [to, setToken] = useRecoilState(tokenState);
    const handleLike = async () => {
-    console.log(123)
+
     setAuthToken(to);
     try {
       const id = data.id;
@@ -31,7 +31,7 @@ const Feed = ({data}) => {
       console.error("Login failed", error);
     }
   };
-  console.log(data)
+
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>

@@ -48,6 +48,11 @@ import { setAuthToken, api} from "../../utils/helpers/setAuthToken"
               "Content-Type": "multipart/form-data",
             },
           });
+          console.log(res.success)
+          if(res.success == 200) {
+            setSelectedImage(imagesDataURL[0])
+            setContent("")
+          }
           console.log("het qua: ", res)
         } catch (error) {
           console.error("Add sai!", error);
@@ -65,7 +70,7 @@ import { setAuthToken, api} from "../../utils/helpers/setAuthToken"
         quality: 1,
       });
   
-      console.log(result);
+     
   
       if (!result.canceled) {
         setSelectedImage(result.assets[0].uri);
@@ -171,7 +176,7 @@ import { setAuthToken, api} from "../../utils/helpers/setAuthToken"
             style={{
               height: 170,
               width: 170,
-              borderRadius: 85,
+        
               borderWidth: 2,
               // borderColor: COLORS.primary,
             }}

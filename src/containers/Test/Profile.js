@@ -243,7 +243,7 @@ const Profile = ({ navigation}) => {
               borderRadius: 10,
               marginHorizontal: SIZES.padding * 2,
             }}
-            onPress={() => navigation.navigate('EditProfile')}
+            onPress={() => navigation.navigate('CreateInfo')}
           >
             <Text
               style={{

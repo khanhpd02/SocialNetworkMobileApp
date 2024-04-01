@@ -51,6 +51,7 @@ import RegisterScreen from './src/containers/LoginAndSignUp/RegisterScreen';
 import BottomTabNav from './src/containers/Test/BottomTabNav';
 import VertifyPinScreen from "./src/containers/LoginAndSignUp/VertifyPinScreen"
 import { Profile } from './src/containers/Test';
+import CreateInfoScreen from './src/containers/CreateInfo/CreateInfo';
 const Stack = createStackNavigator();
 export default  App = () => {
   return (
@@ -79,6 +80,12 @@ export default  App = () => {
         }} />
         <Stack.Screen name="Dashboard1" component={Dashboard1} />
         <Stack.Screen name="EditProfile" component={EditInforScreen}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
+        <Stack.Screen name="CreateInfo" component={CreateInfoScreen}   options={{
           // Ẩn nút back và tiêu đề
           headerLeft: null,
           headerTitle: null,

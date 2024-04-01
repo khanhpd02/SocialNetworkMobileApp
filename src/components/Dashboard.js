@@ -15,6 +15,7 @@ export const Dashboard = ({ navigation}) => {
   const [likeRR, setLikeRR] = useRecoilState(likeR);
   useEffect(() => {
     const fetchData = async () => {
+      console.log(to)
       setAuthToken(to)
     setStatus('loading');
     try {
