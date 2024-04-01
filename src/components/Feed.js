@@ -8,6 +8,7 @@ import { setAuthToken, api} from "../utils/helpers/setAuthToken"
 const Feed = ({data}) => {
   const [likeRR, setLikeRR] = useRecoilState(likeR);
   const [to, setToken] = useRecoilState(tokenState);
+  
    const handleLike = async () => {
 
     setAuthToken(to);
@@ -72,10 +73,13 @@ const Feed = ({data}) => {
           source={require('../assets/images/heartfeed.jpg')}
         />
       </TouchableOpacity>
-          <Image
-            style={styles.icon}
-            source={require('../assets/images/comment.png')}
-          />
+          
+       
+        <Image
+          style={styles.icon}
+          source={require('../assets/images/comment.png')}
+        />
+      
           <Image
    
             style={styles.icon}

@@ -8,30 +8,39 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import {   tokenState,likeR
 } from "../recoil/initState";
 import { setAuthToken, api} from "../utils/helpers/setAuthToken"
+import Spinner from "../components/Spinner"
 export const Dashboard = ({ navigation}) => {
   const [data, setData] = useState([]);
+  const [dataInfo, setDataInfo] = useState([]);
   const [status, setStatus] = useState('idle');
   const [to, setToken] = useRecoilState(tokenState);
   const [likeRR, setLikeRR] = useRecoilState(likeR);
+  const [load,setLoad] = useState(false)
   useEffect(() => {
     const fetchData = async () => {
-      console.log(to)
+
       setAuthToken(to)
-    setStatus('loading');
+     
     try {
    
       const response = await api.get('https://www.socialnetwork.somee.com/api/post');
       // console.log(response)
       setData(response.data.data);
-
+ setLoad(true)
       setStatus('success');
     } catch (error) {
       console.log(error)
       setStatus('error');
     }
     }
+  
+    // const intervalId = setInterval(fetchData, 1000); // Gọi fetchData mỗi giây một lần
+
+    // // Hủy interval khi component unmount
+    // return () => clearInterval(intervalId);
     fetchData()
-  },[likeRR])
+  }, [likeRR]);
+
 
 
     return (
@@ -59,24 +68,29 @@ export const Dashboard = ({ navigation}) => {
         <View style={styles.storiesWrapper}>
           <Stories />
         </View>
-
-        <ScrollView style={styles.feedContainer}>
-        {
-          data.map((item,index) => (
-            <View key={index}>
-              <Feed data= {item}/>
-            </View>
-          ))
-        }
-    
-         
-        </ScrollView>
-        <View style={styles.footer}>
-          <Icon color={colors.black} size={25} name="home" />
-          <Icon color={colors.gray} size={25} name="search" />
-          <Icon color={colors.gray} size={25} name="plus-square" onPress={() => navigation.navigate('CreatePost')} />
-          <Icon color={colors.gray} size={25} name="heart" onPress={() => navigation.navigate('EditProfile')}  />
+        <View>
+          {
+            load === false ? (
+              <ScrollView style={styles.feedContainer}>
+              <Spinner/>
+              </ScrollView>
+            ) : (
+              <ScrollView style={styles.feedContainer}>
+              {
+                data.map((item,index) => (
+                  <View key={index}>
+                    <Feed data= {item}/>
+                  </View>
+                ))
+              }
+          
+               
+              </ScrollView>
+            )
+          }
         </View>
+       
+      
       </View>
     );
   }

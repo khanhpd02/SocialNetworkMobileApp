@@ -48,8 +48,8 @@ import { setAuthToken, api} from "../../utils/helpers/setAuthToken"
               "Content-Type": "multipart/form-data",
             },
           });
-          console.log(res.success)
-          if(res.success == 200) {
+          
+          if(res.status == 200) {
             setSelectedImage(imagesDataURL[0])
             setContent("")
           }

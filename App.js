@@ -52,9 +52,13 @@ import BottomTabNav from './src/containers/Test/BottomTabNav';
 import VertifyPinScreen from "./src/containers/LoginAndSignUp/VertifyPinScreen"
 import { Profile } from './src/containers/Test';
 import CreateInfoScreen from './src/containers/CreateInfo/CreateInfo';
+import { ChatContextProvider } from './src/context/ChatContext';
+import ChatMessagesScreen from "./src/components/ChatMessagesScreen/ChatMessagesScreen"
 const Stack = createStackNavigator();
 export default  App = () => {
   return (
+    <RecoilRoot>
+    <ChatContextProvider>
     <RecoilRoot>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
@@ -109,6 +113,12 @@ export default  App = () => {
           headerTitle: null,
           headerShown: false,
         }} />
+          <Stack.Screen name="ChatMessagesScreen" component={ChatMessagesScreen}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
          <Stack.Screen name="Profile" component={Profile}   options={{
           // Ẩn nút back và tiêu đề
           headerLeft: null,
@@ -116,32 +126,12 @@ export default  App = () => {
           headerShown: false,
         }} />
       </Stack.Navigator>
-      {/* <Stack.Navigator initialRouteName="BottomTabNavigation">
-      
-        
-        <Stack.Screen name="Dashboard" component={Dashboard} 
-         options={{
-          // Ẩn nút back và tiêu đề
-          headerLeft: null,
-          headerTitle: null,
-          headerShown: false,
-        }} />
-        <Stack.Screen name="Dashboard1" component={Dashboard1} />
-        <Stack.Screen name="EditProfile" component={EditInforScreen}   options={{
-          // Ẩn nút back và tiêu đề
-          headerLeft: null,
-          headerTitle: null,
-          headerShown: false,
-        }} />
-        <Stack.Screen name="CreatePost" component={CreatePostforScreen}   options={{
-          // Ẩn nút back và tiêu đề
-          headerLeft: null,
-          headerTitle: null,
-          headerShown: false,
-        }} />
-      </Stack.Navigator> */}
+     
     </NavigationContainer>
+    
     </RecoilRoot>
+    </ChatContextProvider>
+     </RecoilRoot>
   );
 };
 

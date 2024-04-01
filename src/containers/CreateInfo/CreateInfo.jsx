@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   Modal,
+  StyleSheet
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,9 +18,13 @@ import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import  {decode }  from 'react-native-base64';
 import { setAuthToken, api} from "../../utils/helpers/setAuthToken"
+import { useRecoilState, useRecoilValue } from "recoil";
+import {   tokenState,likeR
+} from "../../recoil/initState";
 const CreateInfoScreen = ({ navigation }) => {
   //
   const [selectedImage, setSelectedImage] = useState(imagesDataURL[0]);
+  const [to, setToken] = useRecoilState(tokenState);
   const [name, setName] = useState("Melissa Peters");
 
   const [FullName, setFullName] = useState("");
@@ -49,48 +54,9 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
   const handleOnPressStartDate = () => {
     setOpenStartDatePicker(!openStartDatePicker);
   };
-  const [token1, setToken] = useState('');
 
-  const decodeToken = (token) => {
-    try {
-      const [header, payload, signature] = token.split(".");
-      const decodedHeader = JSON.parse(base64UrlDecode(header));
-      const decodedPayload = JSON.parse(base64UrlDecode(payload));
-      return decodedPayload;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null; // Trả về null hoặc giá trị mặc định nếu việc giải mã không thành công
-    }
-  };
-  
-  const base64UrlDecode = (base64Url) => {
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    return decode(base64); // Sử dụng hàm decode từ thư viện base-64
-  };
-  
-  const getUserId = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token'); // Lấy token từ AsyncStorage
-      if (token !== null) {
-        console.log(token)
-        const decodedToken = decodeToken(token); // Giải mã token
-        if (decodedToken) {
-          const UserId = decodedToken.id; // Lấy UserId từ payload của token
-          console.log('UserId:', UserId);
-          return UserId; // Trả về UserId
-        } else {
-          console.log('Error decoding token: Token is invalid');
-          return null; // Trả về null nếu token không hợp lệ
-        }
-      } else {
-        console.log('No token found in storage');
-        return null; // Trả về null nếu không tìm thấy token trong AsyncStorage
-      }
-    } catch (error) {
-      console.log('Error retrieving token:', error);
-      return null; // Trả về null nếu có lỗi khi lấy token từ AsyncStorage
-    }
-  };
+
+
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -109,7 +75,7 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
     setAuthToken(to);
     try {
       const formData = new FormData();
-      formData.append("UserId", UserId);
+
       formData.append("FullName", FullName);
       formData.append("WorkPlace", WorkPlace);
       formData.append("Gender", Gender);
@@ -121,6 +87,7 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
       formData.append("Provinces", nameCi);
       formData.append("Career", Career);
       formData.append("Nickname", NickName);
+  
       if (selectedImage) {
         const localUri = selectedImage;
         const filename = localUri.split('/').pop();
@@ -132,18 +99,46 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
           type: 'image/jpeg', // Đổi loại hình ảnh tùy thuộc vào định dạng của file
         });
       }
+      if (selectedImage) {
+        const localUri = selectedImage;
+        const filename = localUri.split('/').pop();
 
-      const res = await api.post("https://www.socialnetwork.somee.com/api/infor/create", formData,   {
+        // Thêm thông tin hình ảnh vào formData
+        formData.append('FileBackground', {
+          uri: localUri,
+          name: filename,
+          type: 'image/jpeg', // Đổi loại hình ảnh tùy thuộc vào định dạng của file
+        });
+      }
+   
+      const data = {
+        //  UserId: UserId,
+          FullName: FullName,
+          WorkPlace: WorkPlace,
+          Gender: Gender,
+          PhoneNumber: PhoneNumber,
+          File: selectedImage,
+          Direction: Address,
+          DateOfBirth: today,
+          Wards: nameWa,
+          Districts: nameDi,
+          Provinces: nameCi,
+          FileBackground: selectedImage,
+          Career: Career,
+          Nickname: NickName,
+        };
+        console.log(data)
+      const res = await api.post("https://www.socialnetwork.somee.com/api/infor/create", data,   {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       if(res.status == 200) {
-        navigation.navigate('Dashboard')
+        navigation.navigate('BottomTabNavigation')
       }
       console.log("het qua: ", res)
     } catch (error) {
-      console.error("Add sai!", error);
+      console.log("Add sai!", error);
     }
   };
   function renderDatePicker() {
@@ -204,13 +199,18 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
       </Modal>
     );
   }
-
+  const [selectedMode, setSelectedMode] = useState(null);
+  const handleModeSelect = (mode,g) => {
+    setGender(g)
+  setSelectedMode(mode);
+  // Thực hiện hành động tương ứng với việc chọn chế độ
+};
   return (
     <SafeAreaView
       style={{
         flex: 1,
         backgroundColor: COLORS.white,
-        paddingHorizontal: 22,
+       
       }}
     >
       <View
@@ -237,11 +237,15 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
         <Text style={{ ...FONTS.h3 }} >Add Profile</Text>
       </View>
 
-      <ScrollView>
+      <ScrollView style={{
+      
+      paddingHorizontal: 22,
+    }}>
         <View
           style={{
             alignItems: "center",
             marginVertical: 22,
+           
           }}
         >
           <TouchableOpacity onPress={handleImageSelection}>
@@ -327,14 +331,41 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
               />
             </View>
           </View>
-
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', marginBottom:30 }}>
+      <TouchableOpacity
+        style={{
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+          marginHorizontal: 5,
+          backgroundColor: selectedMode === 'mode1' ? '#007bff' : '#ccc',
+          borderRadius: 5,
+          width:150,
+          
+        }}
+        onPress={() => handleModeSelect('mode1',false)}
+      >
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff',  textAlign: 'center' }}>Nam</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+          marginHorizontal: 5,
+          backgroundColor: selectedMode === 'mode2' ? '#007bff' : '#ccc',
+          borderRadius: 5,  width:150,
+        }}
+        onPress={() => handleModeSelect('mode2',true)}
+      >
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff',  textAlign: 'center'}}>Nữ</Text>
+      </TouchableOpacity>
+    </View>
           <View
             style={{
               flexDirection: "column",
               marginBottom: 6,
             }}
           >
-            <Text style={{ ...FONTS.h4 }}>Password</Text>
+            <Text style={{ ...FONTS.h4 }}>Address</Text>
             <View
               style={{
                 height: 44,
@@ -351,11 +382,64 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
                 value={Address}
                 onChangeText={(value) => setAddress(value)}
                 editable={true}
-                secureTextEntry
+              
               />
             </View>
           </View>
+          <View
+            style={{
+              flexDirection: "column",
+              marginBottom: 6,
+            }}
+          >
+            <Text style={{ ...FONTS.h4 }}>Phone</Text>
+            <View
+              style={{
+                height: 44,
+                width: "100%",
+                borderColor: COLORS.secondaryGray,
+                borderWidth: 1,
+                borderRadius: 4,
+                marginVertical: 6,
+                justifyContent: "center",
+                paddingLeft: 8,
+              }}
+            >
+              <TextInput
+                value={PhoneNumber}
+                onChangeText={(value) => setPhoneNumber(value)}
+                editable={true}
+              
+              />
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "column",
+              marginBottom: 6,
+            }}
+          >
+            <Text style={{ ...FONTS.h4 }}>Career</Text>
+            <View
+              style={{
+                height: 44,
+                width: "100%",
+                borderColor: COLORS.secondaryGray,
+                borderWidth: 1,
+                borderRadius: 4,
+                marginVertical: 6,
+                justifyContent: "center",
+                paddingLeft: 8,
+              }}
+            >
+              <TextInput
+                value={Career}
+                onChangeText={(value) => setCareer(value)}
+                editable={true}
 
+              />
+            </View>
+          </View>
           <View
             style={{
               flexDirection: "column",
@@ -415,8 +499,9 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
             borderRadius: 6,
             alignItems: "center",
             justifyContent: "center",
+            marginBottom:20
           }}
-          onPress={getUserId}
+          onPress={handlePost}
         >
           <Text
             style={{
@@ -433,5 +518,12 @@ const [nameWa, setNameWa] = useState("Linh Chieu");
     </SafeAreaView>
   );
 };
+export const styles = StyleSheet.create({
+ 
+  feedContainer: {
+    display: 'flex',
+  },
+
+});
 
 export default CreateInfoScreen;

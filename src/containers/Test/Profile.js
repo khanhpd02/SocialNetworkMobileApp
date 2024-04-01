@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS, SIZES, images } from "../../constants";
 import { StatusBar } from "expo-status-bar";
@@ -14,6 +14,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import { photos } from "../../constants/data";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { useRecoilState, useRecoilValue } from "recoil";
+import {   tokenState,likeR
+} from "../../recoil/initState";
+import { setAuthToken, api} from "../../utils/helpers/setAuthToken"
+import Spinner from "../../components/Spinner"
 const PhotosRoutes = ({navigation}) => (
   <View style={{ flex: 1 }}>
     <FlatList
@@ -55,6 +61,29 @@ const renderScene = SceneMap({
 const Profile = ({ navigation}) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
+  const [dataInfo, setDataInfo] = useState([]);
+
+  const [to, setToken] = useRecoilState(tokenState);
+
+  const [load,setLoad] = useState(false)
+  useEffect(() => {
+    const fetchDataInfo = async () => {
+
+      setAuthToken(to)
+     
+    try {
+   
+      const response = await api.get('https://www.socialnetwork.somee.com/api/infor/myinfor');
+    
+      setDataInfo(response.data.data);
+
+    } catch (error) {
+      console.log(error)
+      setStatus('error');
+    }
+    }
+    fetchDataInfo()
+  }, []);
   const Logout = () => {
     AsyncStorage.removeItem('token')
     navigation.navigate('Login')
@@ -121,7 +150,7 @@ const Profile = ({ navigation}) => {
             marginVertical: 8,
           }}
         >
-          Melissa Peters
+         {dataInfo.fullName}
         </Text>
         <Text
           style={{
@@ -129,7 +158,7 @@ const Profile = ({ navigation}) => {
             ...FONTS.body4,
           }}
         >
-          Interior designer
+         {dataInfo.career}
         </Text>
 
         <View
@@ -146,7 +175,7 @@ const Profile = ({ navigation}) => {
               marginLeft: 4,
             }}
           >
-            Lagos, Nigeria
+            {dataInfo.address}
           </Text>
         </View>
 
