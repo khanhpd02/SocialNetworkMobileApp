@@ -1,39 +1,83 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image,TouchableOpacity} from 'react-native';
 import {colors} from '../utils/configs/Colors';
-const Feed = () => {
+import { useRecoilState, useRecoilValue } from "recoil";
+import {   tokenState,likeR
+} from "../recoil/initState";
+import { setAuthToken, api} from "../utils/helpers/setAuthToken"
+const Feed = ({data}) => {
+  const [likeRR, setLikeRR] = useRecoilState(likeR);
+  const [to, setToken] = useRecoilState(tokenState);
+   const handleLike = async () => {
+    console.log(123)
+    setAuthToken(to);
+    try {
+      const id = data.id;
+      await api
+        .post(`https://www.socialnetwork.somee.com/api/like/${id}`)
+        .then((response) => {
+          // Cập nhật dữ liệu vào state
+
+          if (response.status === 200) {
+            console.log(response)
+            console.log(456)
+             setLikeRR(!likeRR);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.error("Login failed", error);
+    }
+  };
+  console.log(data)
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.headerLeftWrapper}>
           <Image
             style={styles.profileThumb}
-            source={require('../assets/images/face.jpeg')}
+            source={{uri: data.avatarUrl}}
           />
-          <Text style={styles.headerTitle}> Catherine</Text>
+          <Text style={styles.headerTitle}> {data.fullName}</Text>
         </View>
         <Image
           style={styles.icon}
           source={require('../assets/images/dots.jpg')}
         />
       </View>
+      <Text style={{marginBottom:10, paddingLeft:10}}>
+          {' '}
+          <Text style={styles.headerTitle}>{data.content}</Text>{' '}
+
+        </Text>
       <View>
-        <Image
-          style={styles.feedImage}
-          source={require('../assets/images/feedImage.jpg')}
-        />
+    
+       {
+          data.images.map((item,index) => (
+            <Image
+            style={{ flex: 1, aspectRatio: 1 }} // Sử dụng flex và aspectRatio để điều chỉnh tỷ lệ của hình ảnh
+            resizeMode="contain" // Sử dụng resizeMode="contain" để hình ảnh vừa với kích thước hiển thị
+            source={{ uri: item.linkImage }}
+          />
+          ))
+       }
       </View>
       <View style={styles.feedImageFooter}>
         <View style={styles.feddimageFooterLeftWrapper}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/images/heartfeed.jpg')}
-          />
+        <TouchableOpacity onPress={handleLike}>
+        <Image
+          style={styles.icon}
+          source={require('../assets/images/heartfeed.jpg')}
+        />
+      </TouchableOpacity>
           <Image
             style={styles.icon}
             source={require('../assets/images/comment.png')}
           />
           <Image
+   
             style={styles.icon}
             source={require('../assets/images/messagefeed.png')}
           />
@@ -51,13 +95,9 @@ const Feed = () => {
           style={styles.likesImage}
           source={require('../assets/images/heart.png')}
         />
-        <Text style={styles.likesTitle}> 1,124 Likes</Text>
+        <Text style={styles.likesTitle}> {data.countLike}  Likes</Text>
 
-        <Text>
-          {' '}
-          <Text style={styles.headerTitle}> Catherine</Text>{' '}
-          <Text style={styles.likesTitle}> Missing Summary </Text>
-        </Text>
+      
       </View>
     </View>
   );

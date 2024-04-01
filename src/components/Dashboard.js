@@ -1,11 +1,38 @@
-import React, {Component} from 'react';
+import React, {Component,useEffect,useState} from 'react';
 import {Text, View, StyleSheet, ScrollView, Image} from 'react-native';
 import {colors} from '../utils/configs/Colors';
 import Feed from '../components/Feed';
 import Stories from '../components/Stories';
 import Icon from 'react-native-vector-icons/FontAwesome';
-export class FeedScreen extends Component {
-  render() {
+import { useRecoilState, useRecoilValue } from "recoil";
+import {   tokenState,likeR
+} from "../recoil/initState";
+import { setAuthToken, api} from "../utils/helpers/setAuthToken"
+export const Dashboard = ({ navigation}) => {
+  const [data, setData] = useState([]);
+  const [status, setStatus] = useState('idle');
+  const [to, setToken] = useRecoilState(tokenState);
+  const [likeRR, setLikeRR] = useRecoilState(likeR);
+  useEffect(() => {
+    const fetchData = async () => {
+      setAuthToken(to)
+    setStatus('loading');
+    try {
+   
+      const response = await api.get('https://www.socialnetwork.somee.com/api/post');
+      // console.log(response)
+      setData(response.data.data);
+
+      setStatus('success');
+    } catch (error) {
+      console.log(error)
+      setStatus('error');
+    }
+    }
+    fetchData()
+  },[likeRR])
+
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -33,20 +60,26 @@ export class FeedScreen extends Component {
         </View>
 
         <ScrollView style={styles.feedContainer}>
-          <Feed />
+        {
+          data.map((item,index) => (
+            <Feed data= {item}/>
+          ))
+        }
+    
+         
         </ScrollView>
         <View style={styles.footer}>
           <Icon color={colors.black} size={25} name="home" />
           <Icon color={colors.gray} size={25} name="search" />
-          <Icon color={colors.gray} size={25} name="plus-square" />
-          <Icon color={colors.gray} size={25} name="heart" />
+          <Icon color={colors.gray} size={25} name="plus-square" onPress={() => navigation.navigate('CreatePost')} />
+          <Icon color={colors.gray} size={25} name="heart" onPress={() => navigation.navigate('EditProfile')}  />
         </View>
       </View>
     );
   }
-}
 
-export default FeedScreen;
+
+export default Dashboard;
 
 export const styles = StyleSheet.create({
   container: {
@@ -60,6 +93,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderBottomColor: colors.gray1,
     borderBottomWidth: 1,
+    marginTop:15
   },
   footer: {
     display: 'flex',

@@ -15,6 +15,10 @@ export const tokenState = atom({
     }
   })
 });
+export const likeR = atom({
+  key: "likeR",
+  default: false
+});
 
 export const initState = atom({
   key: "initText",

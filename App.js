@@ -42,29 +42,42 @@ import Login from './src/containers/LoginAndSignUp/LoginScreen';
 import Dashboard from './src/components/Dashboard';
 import Dashboard1 from './src/containers/LoginAndSignUp/Dashboard1';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import EditInforScreen from './src/containers/Infor/EditInforScreen';
 import { RecoilRoot } from "recoil";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import CreatePostforScreen from './src/containers/CreatePost/CreatePost';
 const Stack = createStackNavigator();
-const App = () => {
+export default  App = () => {
   return (
+    <RecoilRoot>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen name="Dashboard" component={Dashboard} 
+         options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
         <Stack.Screen name="Dashboard1" component={Dashboard1} />
+        <Stack.Screen name="EditProfile" component={EditInforScreen}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
+        <Stack.Screen name="CreatePost" component={CreatePostforScreen}   options={{
+          // Ẩn nút back và tiêu đề
+          headerLeft: null,
+          headerTitle: null,
+          headerShown: false,
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
-  );
-};
-
-const Root = () => {
-  return (
-    <RecoilRoot>
-      <App />
     </RecoilRoot>
   );
 };
 
-export default Root;
+
