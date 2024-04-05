@@ -1,4 +1,5 @@
 import React from 'react';
+import { Suspense } from 'react';
 import { RecoilRoot } from "recoil";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -19,6 +20,8 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
       <ChatContextProvider>
+    <RecoilRoot>
+
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
@@ -33,6 +36,8 @@ const App = () => {
             <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
+    </RecoilRoot>
+
       </ChatContextProvider>
   );
 };
@@ -40,7 +45,10 @@ const App = () => {
 const Root = () => {
   return (
     <RecoilRoot>
+      <Suspense fallback={console.log("load")}>
       <App />
+
+      </Suspense>
     </RecoilRoot>
   );
 };

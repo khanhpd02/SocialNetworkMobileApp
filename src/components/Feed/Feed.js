@@ -58,6 +58,7 @@ const Feed = ({data}) => {
        {
           data.images.map((item,index) => (
             <Image
+            key={index}
             style={{ flex: 1, aspectRatio: 1 }} // Sử dụng flex và aspectRatio để điều chỉnh tỷ lệ của hình ảnh
             resizeMode="contain" // Sử dụng resizeMode="contain" để hình ảnh vừa với kích thước hiển thị
             source={{ uri: item.linkImage }}
