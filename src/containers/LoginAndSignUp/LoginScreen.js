@@ -4,7 +4,7 @@ import Background from '../../components/LoginAndSignUp/Background'
 import Logo from '../../components/LoginAndSignUp/Logo'
 import Header from '../../components/LoginAndSignUp/Header'
 import Button from '../../components/LoginAndSignUp/Button'
-// import TextInput from '../../components/LoginAndSignUp/TextInput'
+import TextInput from '../../components/LoginAndSignUp/TextInput'
 import BackButton from '../../components/LoginAndSignUp/BackButton'
 import { theme } from '../../theme/LoginAndSignUp/theme'
  import { useRecoilState, useRecoilValue } from "recoil";
@@ -17,7 +17,6 @@ import {
   SafeAreaView,
   Alert,
   TouchableOpacity,
-  TextInput,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext';
