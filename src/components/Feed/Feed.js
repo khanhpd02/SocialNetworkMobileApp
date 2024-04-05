@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image,TouchableOpacity} from 'react-native';
-import {colors} from '../utils/configs/Colors';
+import {colors} from '../../utils/configs/Colors';
 import { useRecoilState, useRecoilValue } from "recoil";
 import {   tokenState,likeR
-} from "../recoil/initState";
-import { setAuthToken, api} from "../utils/helpers/setAuthToken"
+} from "../../recoil/initState";
+import { setAuthToken, api} from "../../utils/helpers/setAuthToken"
 const Feed = ({data}) => {
   const [likeRR, setLikeRR] = useRecoilState(likeR);
   const [to, setToken] = useRecoilState(tokenState);
@@ -45,7 +45,7 @@ const Feed = ({data}) => {
         </View>
         <Image
           style={styles.icon}
-          source={require('../assets/images/dots.jpg')}
+          source={require('../../assets/images/dots.jpg')}
         />
       </View>
       <Text style={{marginBottom:10, paddingLeft:10}}>
@@ -70,25 +70,25 @@ const Feed = ({data}) => {
         <TouchableOpacity onPress={handleLike}>
         <Image
           style={styles.icon}
-          source={require('../assets/images/heartfeed.jpg')}
+          source={require('../../assets/images/heartfeed.jpg')}
         />
       </TouchableOpacity>
           
        
         <Image
           style={styles.icon}
-          source={require('../assets/images/comment.png')}
+          source={require('../../assets/images/comment.png')}
         />
       
           <Image
    
             style={styles.icon}
-            source={require('../assets/images/messagefeed.png')}
+            source={require('../../assets/images/messagefeed.png')}
           />
         </View>
         <Image
           style={styles.icon}
-          source={require('../assets/images/bookmarkfeed.png')}
+          source={require('../../assets/images/bookmarkfeed.png')}
         />
       </View>
       <View style={styles.underLineWRapper}>
@@ -97,7 +97,7 @@ const Feed = ({data}) => {
       <View style={styles.likesAndCommentsWrapper}>
         <Image
           style={styles.likesImage}
-          source={require('../assets/images/heart.png')}
+          source={require('../../assets/images/heart.png')}
         />
         <Text style={styles.likesTitle}> {data.countLike}  Likes</Text>
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
-import {colors} from '.././utils/configs/Colors';
+import {colors} from '../../utils/configs/Colors';
 
 export class PrimaryButton extends Component {
   constructor(props) {

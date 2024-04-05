@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {colors} from '../utils/configs/Colors';
+import {colors} from '../../utils/configs/Colors';
 export class SearchBox extends Component {
   constructor(props) {
     super(props);

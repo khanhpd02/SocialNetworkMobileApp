@@ -1,15 +1,15 @@
 import React, {Component,useEffect,useState} from 'react';
 import {Text, View, StyleSheet, ScrollView, Image} from 'react-native';
-import {colors} from '../utils/configs/Colors';
-import Feed from '../components/Feed';
-import Stories from '../components/Stories';
+import {colors} from '../../utils/configs/Colors';
+import Feed from '../../components/Feed/Feed';
+import Stories from '../../components/Feed/Stories';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useRecoilState, useRecoilValue } from "recoil";
 import {   tokenState,likeR
-} from "../recoil/initState";
-import { setAuthToken, api} from "../utils/helpers/setAuthToken"
-import Spinner from "../components/Spinner"
-export const Dashboard = ({ navigation}) => {
+} from "../../recoil/initState";
+import { setAuthToken, api} from "../../utils/helpers/setAuthToken"
+import Spinner from "../../components/Spinner"
+export const FeedScreen = ({ navigation}) => {
   const [data, setData] = useState([]);
   const [dataInfo, setDataInfo] = useState([]);
   const [status, setStatus] = useState('idle');
@@ -48,20 +48,20 @@ export const Dashboard = ({ navigation}) => {
         <View style={styles.header}>
           <Image
             style={styles.icon}
-            source={require('../assets/images/camera.jpg')}
+            source={require('../../assets/images/camera.jpg')}
           />
           <Image
             style={styles.logo}
-            source={require('../assets/images/instagramLogo.png')}
+            source={require('../../assets/images/instagramLogo.png')}
           />
           <View style={styles.headerRightWrapper}>
             <Image
               style={styles.icon}
-              source={require('../assets/images/igtv.png')}
+              source={require('../../assets/images/igtv.png')}
             />
             <Image
               style={styles.icon}
-              source={require('../assets/images/message.jpg')}
+              source={require('../../assets/images/message.jpg')}
             />
           </View>
         </View>
@@ -96,7 +96,7 @@ export const Dashboard = ({ navigation}) => {
   }
 
 
-export default Dashboard;
+export default FeedScreen;
 
 export const styles = StyleSheet.create({
   container: {

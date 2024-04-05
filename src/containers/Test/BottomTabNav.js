@@ -9,7 +9,7 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { COLORS } from "../../constants";
 import { Create, Home, Messages, Profile, Settings } from ".";
-import Dashboard from "../../components/Dashboard";
+import FeedScreen from "../../containers/Feed/FeedScreen";
 import CreatePostforScreen from "../CreatePost/CreatePost";
 const Tab = createBottomTabNavigator();
 
@@ -31,8 +31,8 @@ const BottomTabNav = () => {
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
-        name="Dashboard"
-        component={Dashboard}
+        name="FeedScreen"
+        component={FeedScreen}
         options={{
           tabBarIcon: ({ focused }) => {
             return (

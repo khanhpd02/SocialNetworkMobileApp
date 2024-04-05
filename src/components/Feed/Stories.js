@@ -13,40 +13,40 @@ export class Stories extends Component {
           <View style={styles.myStoryImageWrapper}>
             <Image
               style={styles.myStoryImage}
-              source={require('../assets/images/face.jpeg')}
+              source={require('../../assets/images/face.jpeg')}
             />
             <Text style={styles.profileName}>Catherin</Text>
           </View>
           <View style={styles.otherStoryImageWrapper}>
             <Image
               style={styles.storyRound}
-              source={require('../assets/images/storiescircle.png')}
+              source={require('../../assets/images/storiescircle.png')}
             />
             <Image
               style={styles.otherStories}
-              source={require('../assets/images/face.jpeg')}
+              source={require('../../assets/images/face.jpeg')}
             />
             <Text style={styles.profileName}>Seona</Text>
           </View>
           <View style={styles.otherStoryImageWrapper}>
             <Image
               style={styles.storyRound}
-              source={require('../assets/images/storieslivecircle.png')}
+              source={require('../../assets/images/storieslivecircle.png')}
             />
             <Image
               style={styles.otherStories}
-              source={require('../assets/images/face.jpeg')}
+              source={require('../../assets/images/face.jpeg')}
             />
             <Text style={styles.profileName}>Margeret</Text>
           </View>
           <View style={styles.otherStoryImageWrapper}>
             <Image
               style={styles.storyRound}
-              source={require('../assets/images/storiescircle.png')}
+              source={require('../../assets/images/storiescircle.png')}
             />
             <Image
               style={styles.otherStories}
-              source={require('../assets/images/face.jpeg')}
+              source={require('../../assets/images/face.jpeg')}
             />
             <Text style={styles.profileName}>Sonia</Text>
           </View>
